@@ -90,7 +90,7 @@ var sortRun = function(array, bounds) {
 		min = array[i];
 		minPos = i;
 		for(var j = i; j <= bounds.end; j++) {
-			if(min<array[j]) {
+			if(min > array[j]) {
 				min = array[j];
 				minPos = j;
 			}
