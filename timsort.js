@@ -2,6 +2,9 @@
 var Pair = function(start) {
 	this.start = start;
 	this.end = 0;
+	this.toString = function() {
+		return '(' + this.start + ', ' + this.end + ')';
+	}
 	return this;
 };
 
@@ -19,12 +22,12 @@ var getMinrun = function(length) {
 	
 	console.log("Minrun is " + length);
 	return length;
-}
+};
 
-var splitArray = function(array, minrun) {
-	console.log('About to splitArray');
+var getRuns = function(array, minrun) {
+	console.log('About to getRuns');
 	var length = array.length;
-	var splitedArrays = [];
+	var runs = [];
 	var isAscend = true;
 	var pos = 0;
 	var bounds;
@@ -58,21 +61,55 @@ var splitArray = function(array, minrun) {
 		}
 		
 		pos = bounds.end + 1;
-		splitedArrays.push(bounds);	
+		runs.push(bounds);	
 	}
 	
 	console.log('Splitted arrays: ');
-	for(var i = 0; i < splitedArrays.length; i++ ) {
-		console.log(splitedArrays[i]);
+	for(var i = 0; i < runs.length; i++ ) {
+		console.log(runs[i].toString());
 	}
-	return splitedArrays;
-}
+	return runs;
+};
+
+//--------------------------------------
+
+var sortRuns = function(array, runs) {
+	console.log('About to sortRuns');
+	for(var i = 0; i < runs.length; i++) {
+		sortRun(array, runs[i]);
+	}
+};
+
+var sortRun = function(array, bounds) {
+	console.log('About to sort run with bounds: ' + bounds.toString());
+	var min;
+	var minPos;
+	var temp;
+	
+	for(var i = bounds.start; i <= bounds.end; i++) {
+		min = array[i];
+		minPos = i;
+		for(var j = i; j <= bounds.end; j++) {
+			if(min<array[j]) {
+				min = array[j];
+				minPos = j;
+			}
+		}
+		temp = array[i];
+		array[i] = min;
+		array[minPos] = temp;
+	}
+};
+
+//--------------------------------------
 
 function sort(array) {
 	var length = array.length;
 	var minrun = getMinrun(length);
 	
-	var arrays = splitArray(array, minrun);
+	var runs = getRuns(array, minrun);
+	
+	sortRuns(array, runs);
 }
 
 module.exports = {
