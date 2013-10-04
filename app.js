@@ -1,7 +1,6 @@
-var timrun = require('./timsort.js');
+var timsort = require('./timsort.js');
 
-var arrayLength = 100;
-
+//------------------------------------------------
 var initArray = function(array, length) { 
 	for(var i=0; i < length; i++) {
 		array.push(i);
@@ -21,13 +20,18 @@ var messArray = function(array) {
 	}
 };
 
+//------------------------------------------------
+
 var array = [];
+var arrayLength = 128;
+
 initArray(array, arrayLength);
+console.log('Initial array:\n' + array + '\n');
+
 messArray(array);
+console.log('Unsorted array:\n' + array + '\n');
 
-console.log('Unsorted array:\n' + array);
-
-
-
+timsort.sort(array);
+console.log('Sorted array:\n' + array + '\n');
 
 
