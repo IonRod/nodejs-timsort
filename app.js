@@ -26,10 +26,10 @@ var array = [];
 var arrayLength = 128;
 
 initArray(array, arrayLength);
-console.log('Initial array:\n' + array + '\n');
+//console.log('Initial array:\n' + array + '\n');
 
 messArray(array);
-console.log('Unsorted array:\n' + array + '\n');
+//console.log('Unsorted array:\n' + array + '\n');
 
 timsort.sort(array);
 console.log('Sorted array:\n' + array + '\n');
