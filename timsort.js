@@ -4,14 +4,17 @@ var Pair = function(start) {
 	this.end = 0;
 	this.toString = function() {
 		return '(' + this.start + ', ' + this.end + ')';
-	}
+	};
+	this.size = function() {
+		return this.end -this.start + 1;
+	};
 	return this;
 };
 
 //--------------------------------------
 
 var getMinrun = function(length) {
-	console.log("About to calculate minrun for " + length);
+//	console.log("About to calculate minrun for " + length);
 	var r = 0;
 	
 	while(length >= 64) {
@@ -20,12 +23,12 @@ var getMinrun = function(length) {
 	}
 	length += r;
 	
-	console.log("Minrun is " + length);
+//	console.log("Minrun is " + length);
 	return length;
 };
 
 var getRuns = function(array, minrun) {
-	console.log('About to getRuns');
+//	console.log('About to getRuns');
 	var length = array.length;
 	var runs = [];
 	var isAscend = true;
@@ -64,7 +67,7 @@ var getRuns = function(array, minrun) {
 		runs.push(bounds);	
 	}
 	
-	console.log('Splitted arrays: ');
+//	console.log('Splitted arrays: ');
 	for(var i = 0; i < runs.length; i++ ) {
 		console.log(runs[i].toString());
 	}
@@ -74,17 +77,15 @@ var getRuns = function(array, minrun) {
 //--------------------------------------
 
 var sortRuns = function(array, runs) {
-	console.log('About to sortRuns');
+//	console.log('About to sortRuns');
 	for(var i = 0; i < runs.length; i++) {
 		sortRun(array, runs[i]);
 	}
 };
 
 var sortRun = function(array, bounds) {
-	console.log('About to sort run with bounds: ' + bounds.toString());
+//	console.log('About to sort run with bounds: ' + bounds.toString());
 	var key;
-	var minPos;
-	var temp;
 	
 	var i = 0, j = 0;
 	for(i = bounds.start + 1; i <= bounds.end; i++) {
@@ -96,16 +97,7 @@ var sortRun = function(array, bounds) {
 		}
 		array[j+1] = key;
 	}
-	
-	/*
-	 * for i = 2, 3, ..., n:  
-    key := A[i]
-    j := i - 1
-    while j >= 1 and A[j] > key:
-        A[j+1] := A[j]
-        j := j - 1
-    A[j+1] := key
-	 */
+
 };
 
 //--------------------------------------
@@ -119,21 +111,25 @@ var mergeRuns = function(array, bounds) {
 	var temp;
 
 	while(bounds.length > 0) {
-		
-		if(bounds.length > 0)
-			runStack.push(bounds.pop());
+		runStack.push(bounds.pop());
 		
 		last = runStack.length - 1;
 		
 		while(last >= 2) {
-			if((runStack[last] > runStack[last-1] + runStack[last-2]) || (runStack[last-1] > runStack[last-2])) {
-				if(runStack[last] > runStack[last-2]) {
-					run = mergeRun(array, runStack[last-1], runStack[runStack[last]]);
+			if((runStack[last].size() <= (runStack[last-1].size() + runStack[last-2].size())) || (runStack[last-1].size() <= runStack[last-2].size())) {				
+				
+				console.log('runStack values: ')
+				for(var i = 0; i < runStack.length; i++ ) {
+					console.log(runStack[i].toString());
+				}
+				
+				if(runStack[last].size() <= runStack[last-2].size()) {
+					run = mergeRun(array, runStack[last-1], runStack[last]);
 					runStack.pop();
 					runStack.pop();
 					runStack.push(run);
 				} else {
-					run = mergeRun(array, runStack[last-1], runStack[runStack[last-2]]);
+					run = mergeRun(array, runStack[last-1], runStack[last-2]);
 					temp = runStack.pop();
 					runStack.pop();
 					runStack.pop();
@@ -143,17 +139,12 @@ var mergeRuns = function(array, bounds) {
 			} else {
 				break;
 			}
-			last = runStack.length - 1;	
-			console.log('Last is ' + last);
+			last = runStack.length - 1;
 		}
-		
-		console.log('Bounds length is' + bounds.length);
-		if(bounds.length == 0) {
-			while(runStack.length > 1) {
-				run = mergeRun(array, runStack.pop(), runStack.pop());
-				runStack.push(run);
-			}
-		}
+	}
+
+	if(runStack.length == 2) {
+		mergeRun(array, runStack[0], runStack[1]);
 	}
 };
 
@@ -165,7 +156,7 @@ function mergeRun(array, runA, runB) {
 	console.log('About to merge runs: ' + runA + ' and ' + runB);
 	var newRun = new Pair(0);
 	
-	if((runA.end-runA.start) < (runB.end-runB.start)) {
+	if(runA.size() < runB.size()) {
 		
 	} else {
 		
@@ -182,7 +173,7 @@ function mergeRun(array, runA, runB) {
 	} else {
 		newRun.end = runA.end;
 	}
-	console.log('New run is ' + newRun.toString());
+	console.log('New run is ' + newRun.toString() + ' with size ' + newRun.size());
 	return newRun;
 };
 
