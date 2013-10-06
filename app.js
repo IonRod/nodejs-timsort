@@ -7,7 +7,7 @@ var initArray = function(array, length) {
 	}
 };
 
-var messArray = function(array) {
+var permutateArray = function(array) {
 	var length = array.length;
 	var temp;
 	var moveTo = 0;
@@ -28,8 +28,8 @@ var arrayLength = 128;
 initArray(array, arrayLength);
 //console.log('Initial array:\n' + array + '\n');
 
-messArray(array);
-//console.log('Unsorted array:\n' + array + '\n');
+permutateArray(array);
+//console.log('Permutated array:\n' + array + '\n');
 
 timsort.sort(array);
 console.log('Sorted array:\n' + array + '\n');
